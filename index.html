@@ -16,21 +16,31 @@ body {
     font-family: 'Montserrat', sans-serif;
     text-align:center;
     overflow-x: hidden;
-    font-size: 18px;
+    font-size: 16px;
 }
 
-/* --- BOLA DE ESPEJOS MEJORADA --- */
+/* --- CANVAS PARA FUEGOS ARTIFICIALES --- */
+#fireworks-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* --- BOLA DE ESPEJOS --- */
 .disco-ball-container {
     position: relative;
-    height: 130px;
+    height: 120px;
     margin-top: 10px;
     display: flex;
     justify-content: center;
+    z-index: 1;
 }
 
 .disco-ball {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     background: radial-gradient(circle at 30% 30%, #fff, #999, #333);
     border-radius: 50%;
     box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
@@ -39,122 +49,97 @@ body {
     border: 1px solid rgba(255,255,255,0.3);
 }
 
-.disco-ball::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-image: linear-gradient(to right, transparent 45%, rgba(255,255,255,0.3) 50%, transparent 55%),
-                      linear-gradient(to bottom, transparent 45%, rgba(255,255,255,0.3) 50%, transparent 55%);
-    background-size: 10px 10px;
-    border-radius: 50%;
-}
-
-@keyframes rotateBall {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes swing {
-    from { transform: translateX(-15px) rotate(-10deg); }
-    to { transform: translateX(15px) rotate(10deg); }
-}
-
-/* --- EFECTOS DE FONDO --- */
-.background-animation {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -1;
-    pointer-events: none;
-}
-
-.nota {
-    position: absolute;
-    color: rgba(0, 0, 0, 0.15);
-    font-size: 24px;
-    animation: floatUp 10s infinite linear;
-    bottom: -50px;
-}
-
-@keyframes floatUp {
-    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-    20% { opacity: 0.5; }
-    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
-}
+@keyframes rotateBall { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes swing { from { transform: translateX(-10px) rotate(-5deg); } to { transform: translateX(10px) rotate(5deg); } }
 
 /* --- TEXTOS --- */
-.semicirculo { font-family:'Great Vibes', cursive; font-size:48px; color:#333; margin-bottom: 5px; }
-.titulo-15 { font-size:32px; letter-spacing:5px; color:#333; text-transform: uppercase; margin-bottom: 10px; }
-.nombres { font-family:'Great Vibes', cursive; font-size:85px; color:#000; margin:10px 0; }
+.semicirculo { font-family:'Great Vibes', cursive; font-size:42px; color:#333; margin-bottom: 5px; z-index: 1; position: relative; }
+.titulo-15 { font-size:28px; letter-spacing:4px; color:#333; text-transform: uppercase; z-index: 1; position: relative; }
+.nombres { font-family:'Great Vibes', cursive; font-size:75px; color:#000; margin:10px 0; z-index: 1; position: relative; }
 
 .contenedor {
-    max-width:850px;
+    max-width:800px;
     margin:20px auto;
-    background: #000000;
+    background: rgba(0, 0, 0, 0.92);
     border: 2px solid #d4af37;
     border-radius:25px;
-    padding:40px 20px;
+    padding:35px 20px;
     position: relative;
-    z-index: 1;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 2;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
 }
 
-.foto-cumple {
-    width: 90%;
-    max-width: 500px;
-    border-radius: 15px;
-    border: 3px solid #d4af37;
-    margin: 20px auto;
+/* --- CONTADOR ELEGANTE (MÁS CHICO) --- */
+.grid-contador {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.cuadrito-tiempo {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    padding: 10px;
+    border-radius: 12px;
+    min-width: 70px;
+}
+
+.numero-pequeno { 
+    font-size: 24px; 
+    font-weight: 600; 
+    color: #f1c40f; 
     display: block;
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    line-height: 1;
 }
 
+.etiqueta-tiempo {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ccc;
+}
+
+/* --- GRID INFO --- */
 .grid-info {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 15px;
-    margin: 30px 0;
+    margin: 25px 0;
 }
 
 .cuadrito {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(212, 175, 55, 0.1);
     border: 1px solid #d4af37;
-    padding: 20px 10px;
+    padding: 15px 10px;
     border-radius: 15px;
 }
 
-.numero-grande { font-size: 42px; font-weight: 600; color: #f1c40f; }
-
-p { font-size: 1.2em; line-height: 1.6; }
+p { font-size: 1.1em; line-height: 1.5; }
 
 .boton {
     background: linear-gradient(45deg, #d4af37, #f1c40f);
     border:none;
-    padding:20px 35px;
+    padding:18px 30px;
     border-radius:40px;
     font-weight:bold;
     color: #000;
     text-transform: uppercase;
     cursor:pointer;
     text-decoration: none;
-    display: inline-block;
-}
-
-.reproductor-estilo {
-    margin: 20px 0;
-    filter: invert(100%);
-    height: 40px;
+    font-size: 14px;
 }
 
 @media (max-width: 600px) {
-    .nombres { font-size: 60px; }
-    .semicirculo { font-size: 36px; }
-    .contenedor { margin: 10px; padding: 25px 15px; }
+    .nombres { font-size: 55px; }
+    .semicirculo { font-size: 32px; }
+    .cuadrito-tiempo { min-width: 60px; padding: 8px; }
 }
 </style>
 </head>
 <body>
 
-<div class="background-animation" id="bg-anim"></div>
+<canvas id="fireworks-canvas"></canvas>
 
 <div class="disco-ball-container">
     <div class="disco-ball"></div>
@@ -165,32 +150,31 @@ p { font-size: 1.2em; line-height: 1.6; }
   <div class="titulo-15">NUESTROS 15 AÑOS</div>
   <div class="nombres">Luciana & Martina</div>
   
-  <img src="IMG_4413.jpg" alt="Luciana y Martina" class="foto-cumple" onerror="this.src='https://via.placeholder.com/500x400?text=Sube+tu+foto+a+GitHub'">
-
-  <div style="margin: 20px 0;">
-      <p style="font-size: 14px; color: #333; margin-bottom: 5px; font-weight: bold;">Música para tu invitación ♫</p>
-      <audio controls loop class="reproductor-estilo">
+  <div style="margin: 15px 0;">
+      <audio controls loop style="filter: invert(100%); height: 35px; opacity: 0.8;">
           <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
       </audio>
   </div>
 </div>
 
 <div class="contenedor">
-    <p style="font-style: italic;">“Hay momentos que se vuelven inolvidables cuando se comparten con las personas que más queremos”</p>
+    <p style="font-style: italic; font-size: 0.9em; opacity: 0.9;">
+        “Hay momentos que se vuelven inolvidables cuando se comparten con las personas que más queremos”
+    </p>
 
-    <h3 style="color:#d4af37; letter-spacing: 2px; font-size: 28px;">¿CUÁNTO FALTA PARA ENCONTRARNOS?</h3>
+    <h4 style="color:#d4af37; letter-spacing: 2px; margin-bottom: 5px;">¿CUÁNTO FALTA?</h4>
     
-    <div class="grid-info">
-      <div class="cuadrito"><span id="dias" class="numero-grande">00</span><br><span>Días</span></div>
-      <div class="cuadrito"><span id="horas" class="numero-grande">00</span><br><span>Horas</span></div>
-      <div class="cuadrito"><span id="min" class="numero-grande">00</span><br><span>Minutos</span></div>
-      <div class="cuadrito"><span id="seg" class="numero-grande">00</span><br><span>Segundos</span></div>
+    <div class="grid-contador">
+      <div class="cuadrito-tiempo"><span id="dias" class="numero-pequeno">00</span><span class="etiqueta-tiempo">Días</span></div>
+      <div class="cuadrito-tiempo"><span id="horas" class="numero-pequeno">00</span><span class="etiqueta-tiempo">Hrs</span></div>
+      <div class="cuadrito-tiempo"><span id="min" class="numero-pequeno">00</span><span class="etiqueta-tiempo">Min</span></div>
+      <div class="cuadrito-tiempo"><span id="seg" class="numero-pequeno">00</span><span class="etiqueta-tiempo">Seg</span></div>
     </div>
 
     <div class="grid-info">
-      <div class="cuadrito">📅<br><strong style="color:white">27 de Marzo 2026</strong></div>
-      <div class="cuadrito">⏰<br><strong style="color:white">21:00 a 01:00 hrs</strong></div>
-      <div class="cuadrito">👗<br><strong style="color:white">Semiformal</strong></div>
+      <div class="cuadrito">📅<br><strong>27 de Marzo 2026</strong></div>
+      <div class="cuadrito">⏰<br><strong>21:00 a 01:00 hrs</strong></div>
+      <div class="cuadrito">👗<br><strong>Semiformal</strong></div>
     </div>
 
     <p>Por favor, confirma tu asistencia antes del 10 de marzo</p>
@@ -198,52 +182,86 @@ p { font-size: 1.2em; line-height: 1.6; }
 
     <div style="margin: 30px 0;">
         <button class="boton" style="background:transparent; border: 1px solid #d4af37; color:#d4af37;" 
-           onclick="window.open('https://www.google.com/maps?q=Prudencio+Murguiondo+5109+Montevideo')">
+           onclick="window.open('https://maps.google.com/?q=Prudencio+Murguiondo+5121+Montevideo')">
             Ver en el mapa
         </button>
-        <p style="font-size: 1em; margin-top: 10px;">Prudencio Murguiondo 5109. Coop. Ucoviceta.</p>
+        <p style="font-size: 0.95em; margin-top: 10px; color: #d4af37;">Prudencio Murguiondo 5121. Coop. Ucoviceta.</p>
     </div>
     
-    <p style="font-style: italic; font-size: 2.8em; color: #f1c40f;">¡¡Te esperamos!!</p>
+    <p style="font-family:'Great Vibes', cursive; font-size: 3em; color: #f1c40f; margin: 10px 0;">¡¡Te esperamos!!</p>
 
-    <div style="margin-top: 50px; border-top: 1px solid rgba(212,175,55,0.2); padding-top: 20px;">
-        <span style="font-size:40px">🎁</span>
-        <p style="font-family:'Great Vibes', cursive; font-size:40px; color:#d4af37; margin:10px 0;">Regalos</p>
-        <p>Luciana: Prex 1683504<br>Martina: Mi Dinero 3701668510</p>
+    <div style="margin-top: 40px; border-top: 1px solid rgba(212,175,55,0.2); padding-top: 20px;">
+        <p style="font-family:'Great Vibes', cursive; font-size:35px; color:#d4af37; margin:0;">Regalos 🎁</p>
+        <p style="font-size: 0.9em;">Luciana: Prex 1683504<br>Martina: Mi Dinero 3701668510</p>
     </div>
-
     <div style="margin-top: 40px;">
         <span style="font-size:40px">📷</span>
         <p style="font-family:'Great Vibes', cursive; font-size:40px; color:#d4af37; margin:10px 0;">¡Sé nuestro fotógrafo!</p>
-        <button class="boton" onclick="window.open('https://photos.app.goo.gl/wN2iEgpfUNX6MhRx6')">Subir fotos aquí</button>
+
+    <div style="margin-top: 30px;">
+        <button class="boton" style="padding: 12px 20px; font-size: 12px;" onclick="window.open('https://photos.app.goo.gl/wN2iEgpfUNX6MhRx6')">
+            📷 Subir fotos aquí
+        </button>
     </div>
 </div>
 
 <script>
-function crearEfectos() {
-    const contenedor = document.getElementById('bg-anim');
-    const notas = ['♪', '♫', '♩', '♬'];
-    for (let i = 0; i < 15; i++) {
-        let nota = document.createElement('div');
-        nota.className = 'nota';
-        nota.innerText = notas[Math.floor(Math.random() * notas.length)];
-        nota.style.left = Math.random() * 100 + 'vw';
-        nota.style.animationDelay = Math.random() * 10 + 's';
-        contenedor.appendChild(nota);
+// --- FUEGOS ARTIFICIALES ---
+const canvas = document.getElementById('fireworks-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+window.addEventListener('resize', resize);
+resize();
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x; this.y = y; this.color = color;
+        this.velocity = { x: (Math.random() - 0.5) * 6, y: (Math.random() - 0.5) * 6 };
+        this.alpha = 1; this.friction = 0.96;
+    }
+    draw() {
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath(); ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = this.color; ctx.fill();
+    }
+    update() {
+        this.velocity.x *= this.friction; this.velocity.y *= this.friction;
+        this.x += this.velocity.x; this.y += this.velocity.y;
+        this.alpha -= 0.012;
     }
 }
+
+function createFirework() {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * (canvas.height * 0.6);
+    const color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+    for (let i = 0; i < 25; i++) particles.push(new Particle(x, y, color));
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p, i) => {
+        if (p.alpha > 0) { p.update(); p.draw(); } 
+        else { particles.splice(i, 1); }
+    });
+    if (Math.random() < 0.04) createFirework();
+    requestAnimationFrame(animate);
+}
+animate();
+
+// --- CONTADOR ---
 function actualizarContador() {
     const fecha = new Date("March 27, 2026 21:00:00").getTime();
     const ahora = new Date().getTime();
     const dif = fecha - ahora;
     if (dif > 0) {
-        document.getElementById("dias").innerText = Math.floor(dif / (1000 * 60 * 60 * 24));
-        document.getElementById("horas").innerText = Math.floor((dif % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        document.getElementById("min").innerText = Math.floor((dif % (1000 * 60 * 60)) / (1000 * 60));
-        document.getElementById("seg").innerText = Math.floor((dif % (1000 * 60)) / 1000);
+        document.getElementById("dias").innerText = String(Math.floor(dif / (1000 * 60 * 60 * 24))).padStart(2, '0');
+        document.getElementById("horas").innerText = String(Math.floor((dif % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        document.getElementById("min").innerText = String(Math.floor((dif % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        document.getElementById("seg").innerText = String(Math.floor((dif % (1000 * 60)) / 1000)).padStart(2, '0');
     }
 }
-crearEfectos();
 actualizarContador();
 setInterval(actualizarContador, 1000);
 </script>
